@@ -254,10 +254,12 @@ async def verify_tool_servers_config(
                     elif form_data.auth_type == "system_oauth":
                         try:
                             if request.cookies.get("oauth_session_id", None):
-                                token = await request.app.state.oauth_manager.get_oauth_token(
+                                oauth_token = await request.app.state.oauth_manager.get_oauth_token(
                                     user.id,
                                     request.cookies.get("oauth_session_id", None),
                                 )
+                                if oauth_token:
+                                    token = oauth_token.get('access_token', '')
                         except Exception as e:
                             pass
 
@@ -288,10 +290,12 @@ async def verify_tool_servers_config(
             elif form_data.auth_type == "system_oauth":
                 try:
                     if request.cookies.get("oauth_session_id", None):
-                        token = await request.app.state.oauth_manager.get_oauth_token(
+                        oauth_token = await request.app.state.oauth_manager.get_oauth_token(
                             user.id,
                             request.cookies.get("oauth_session_id", None),
                         )
+                        if oauth_token:
+                            token = oauth_token.get('access_token', '')
                 except Exception as e:
                     pass
 
